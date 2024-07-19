@@ -24,7 +24,7 @@ class TestYandexMarket:
         yandex_market_page.check_text(text="Товар успешно добавлен в корзину")
         yandex_market_page.click_any_text(text="Перейти в корзину")
         yandex_market_basket_page.check_text(text=["Корзина", "Перейти к оформлению"])
-        yandex_market_basket_page.save_screenshot(filename="your_filename")
+        yandex_market_basket_page.save_screenshot()
 
         # POST: Удаление товаров
         # yandex_market_page.click_any_parent_text(text="Удалить выбранные")
