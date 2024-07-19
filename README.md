@@ -3,7 +3,7 @@
 ## Подготовка
 1. У вас установлен Python 3.12 +, Google Chrome любой версии, PyCharm, Git.
 2. Склонировать проект, выбрать интерпретатор, создать в корне проекта файл `.env`
-3. Добавить и заполнить данные в `.env`: `ENVIRONMENT=`, `YANDEX_MARKET_EMAIL=`, `YANDEX_MARKET_PASSWORD=`
+3. Создать `.env` и добавить + заполнить: `ENVIRONMENT=`, `YANDEX_MARKET_EMAIL=`, `YANDEX_MARKET_PASSWORD=`
 
 ## Запуск
 1. Запустить командой: `pytest -m yandex_market` или с зелёного треугольника в файле `test_yandex_market`
