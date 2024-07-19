@@ -7,7 +7,7 @@ from pages import BasePage
 class YandexMarketPage(BasePage):
 
     """
-    ЯНДЕКС.МАРКЕТ
+    ЯНДЕКС.МАРКЕТ: Главная
     """
 
     def auth_yandex_market(self, email=getenv('YANDEX_MARKET_EMAIL'), password=getenv('YANDEX_MARKET_PASSWORD')):
