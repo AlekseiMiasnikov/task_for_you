@@ -6,7 +6,7 @@ from pages.yandex_market.yandex_market_page import YandexMarketPage
 class TestYandexMarket:
     def test_yandex_market_add_item(self, yandex_market_page: YandexMarketPage):
 
-        # auth
+        # PRE: auth
         yandex_market_page.auth_yandex_market()
 
         # autotest
@@ -20,7 +20,7 @@ class TestYandexMarket:
         yandex_market_page.check_text(text=["Корзина", "Перейти к оформлению"])
         yandex_market_page.save_screenshot(filename="your_filename")
 
-        # delete items
+        # POST: delete items (не стал создавать фикстуру)
         yandex_market_page.click_any_parent_text(text="Удалить выбранные")
         yandex_market_page.check_text(text="Сложите в корзину нужные товары")
         yandex_market_page.click_any_parent_text(text="Удалить")
