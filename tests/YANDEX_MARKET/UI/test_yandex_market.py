@@ -1,5 +1,6 @@
 from pytest import mark
 
+from config import config
 from pages.yandex_market.yandex_market_basket_page import YandexMarketBasketPage
 from pages.yandex_market.yandex_market_page import YandexMarketPage
 
@@ -7,13 +8,15 @@ from pages.yandex_market.yandex_market_page import YandexMarketPage
 @mark.yandex_market
 class TestYandexMarket:
     def test_yandex_market_add_item(
-            self,
-            yandex_market_page: YandexMarketPage,
-            yandex_market_basket_page: YandexMarketBasketPage
+        self,
+        yandex_market_page: YandexMarketPage,
+        yandex_market_basket_page: YandexMarketBasketPage,
     ):
 
         # PRE: Авторизация
-        yandex_market_page.auth_yandex_market()
+        yandex_market_page.auth_yandex_market(
+            email=config.ym.username, password=config.ym.password
+        )
 
         # Autotest
         yandex_market_page.set_search(text="Ноутбуки HP")
@@ -26,6 +29,7 @@ class TestYandexMarket:
         yandex_market_basket_page.check_text(text=["Корзина", "Перейти к оформлению"])
         yandex_market_basket_page.save_screenshot()
 
+        # TODO: Возможность удаления товара из корзины
         # POST: Удаление товаров
         # yandex_market_page.click_any_parent_text(text="Удалить выбранные")
         # yandex_market_page.check_text(text="Сложите в корзину нужные товары")

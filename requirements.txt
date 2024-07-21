@@ -7,3 +7,9 @@ selene==2.0.0b16
 webdriver-manager==3.8.5
 urllib3~=1.26.12
 get-chrome-driver==1.3.19
+pydantic-settings==2.3.4
+python-dotenv~=1.0.1
+pydantic~=2.8.2
+isort==5.13.2
+black==24.4.2
+flake8==7.1.0

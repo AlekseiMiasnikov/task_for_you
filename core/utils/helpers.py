@@ -1,22 +1,8 @@
-import json
-from os import getcwd, walk
-
-from os import getenv, scandir
+from os import getcwd, scandir, walk
 from os.path import exists, join
 from pathlib import Path
 
 from download_chromedriver import get_stable_chromedriver_version
-
-
-def get_settings(environment: str) -> dict:
-    config_path = join(get_current_folder(folder='config'), 'config.json')
-    with open(config_path) as data:
-        config = json.load(data)
-    return config[environment]
-
-
-def get_env_option(option: str):
-    return get_settings(environment=getenv('ENVIRONMENT'))[option]
 
 
 def get_current_folder(folder: str) -> str:
@@ -34,17 +20,16 @@ def get_current_folder(folder: str) -> str:
 
 def get_fixtures():
     files_list = []
-    for root, dirs, files in walk(get_current_folder(folder='fixtures')):
+    for root, dirs, files in walk(get_current_folder(folder="fixtures")):
         for file in files:
-            if '.pyc' in file:
+            if ".pyc" in file:
                 continue
-            root_folder = root[root.find('fixtures'):].replace('\\', '.').replace('/', '.')
-            file_name = file[:len(file) - 3]
-            files_list.append(f'{root_folder}.{file_name}')
+            root_folder = (
+                root[root.find("fixtures") :].replace("\\", ".").replace("/", ".")
+            )
+            file_name = file[: len(file) - 3]
+            files_list.append(f"{root_folder}.{file_name}")
     return files_list
-
-
-settings_config = get_settings(environment=getenv("ENVIRONMENT"))
 
 
 def get_driver_path() -> str:
@@ -53,4 +38,6 @@ def get_driver_path() -> str:
     if not exists(driver_path):
         return get_stable_chromedriver_version()
 
-    return [file.path for file in scandir(driver_path) if file.name != "driver_version.json"][0]
+    return [
+        file.path for file in scandir(driver_path) if file.name != "driver_version.json"
+    ][0]

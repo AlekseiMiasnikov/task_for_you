@@ -52,7 +52,9 @@ def get_stable_chromedriver_version() -> str:
             }
             json.dump(config, file)
 
-    return [file.path for file in scandir(driver_path) if file.name != "driver_version.json"][0]
+    return [
+        file.path for file in scandir(driver_path) if file.name != "driver_version.json"
+    ][0]
 
 
 if __name__ == "main":

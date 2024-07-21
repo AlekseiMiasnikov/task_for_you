@@ -1,6 +1,9 @@
 from time import sleep
+
 from selene import Browser, command, have
-from core.utils.helpers import get_current_folder, get_env_option
+
+from config import config
+from core.utils.helpers import get_current_folder
 
 
 class BaseLocators:
@@ -8,13 +11,12 @@ class BaseLocators:
 
 
 class BasePage:
-
     """
     CORE
     """
 
     def __init__(self, browser: Browser) -> None:
-        self.driver = browser
+        self.driver: Browser = browser
         self.element = self.driver.element
         self.elements = self.driver.all
 
@@ -29,14 +31,15 @@ class BasePage:
     BASE METHODS
     """
 
-    def open(self, url="/"):
-        # self.driver.open(f"{self.base_url}{url}")
-        self.driver.open(f"{get_env_option(option='YANDEX_MARKET_URL')}{url}")
+    def open(self, url: str = "/"):
+        self.driver.open(f"{config.ym.url}{url}")
 
     def save_screenshot(self, filename: str = "screenshot"):
-        self.driver.driver.save_screenshot(filename=f"{get_current_folder(folder='files')}/{filename}.png")
+        self.driver.driver.save_screenshot(
+            filename=f"{get_current_folder(folder='files')}/{filename}.png"
+        )
 
-    def check_text(self, text, element="//body"):
+    def check_text(self, text: str | list, element: str = "//body"):
         if not isinstance(text, list):
             text = [text]
         for item in text:
@@ -46,21 +49,25 @@ class BasePage:
     Any
     """
 
-    def click_any_text(self, text, idx=1, js_click=False):
+    def click_any_text(self, text: str, idx: int = 1, js_click: bool = False):
         self._click(xpath=f'(//*[text() = "{text}"])[{idx}]', is_js=js_click)
 
-    def click_any_parent_text(self, text, idx=1, js_click=False):
+    def click_any_parent_text(self, text: str, idx: int = 1, js_click: bool = False):
         self._click(xpath=f'(//*[text() = "{text}"]/..)[{idx}]', is_js=js_click)
 
-    def click_any_contains_text(self, text, idx=1, js_click=False):
+    def click_any_contains_text(self, text: str, idx: int = 1, js_click: bool = False):
         self._click(xpath=f'(//*[contains(text(), "{text}")])[{idx}]', is_js=js_click)
 
-    def click_any_contains_parent_text(self, text, idx=1, js_click=False):
-        self._click(xpath=f'(//*[contains(text(), "{text}")]/..)[{idx}]', is_js=js_click)
+    def click_any_contains_parent_text(
+        self, text: str, idx: int = 1, js_click: bool = False
+    ):
+        self._click(
+            xpath=f'(//*[contains(text(), "{text}")]/..)[{idx}]', is_js=js_click
+        )
 
     """
     A
     """
 
-    def click_a_text(self, text, idx=1, js_click=False):
+    def click_a_text(self, text: str, idx: int = 1, js_click: bool = False):
         self._click(xpath=f'(//a[text() = "{text}"])[{idx}]', is_js=js_click)

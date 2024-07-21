@@ -1,5 +1,3 @@
-from os import getenv
-
 import pytest
 from selene.support.shared import browser as driver
 from selene.support.shared import config
@@ -8,17 +6,15 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
 
-from core.utils.helpers import get_current_folder, get_fixtures, get_settings, get_driver_path
+from config import config as settings_config
+from core.utils.helpers import get_current_folder, get_driver_path, get_fixtures
 
 mode = "local"
-settings_config = {}
 pytest_plugins = get_fixtures()
 
 
 def pytest_sessionstart():
-    global settings_config
     disable_warnings(InsecureRequestWarning)
-    settings_config = get_settings(environment=getenv("ENVIRONMENT"))
 
 
 def pytest_addoption(parser):
@@ -26,7 +22,9 @@ def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome")
 
 
-def _create_driver_with_browser_name(*, browser_name="chrome", options):
+def _create_driver_with_browser_name(
+    *, browser_name: str = "chrome", options: webdriver.ChromeOptions
+):
     match browser_name:
         case _:
             return webdriver.Chrome(
@@ -61,11 +59,15 @@ def browser(pytestconfig):
     options.add_argument("--ignore-certificate-errors")
     options.add_argument("--ignore-ssl-errors=yes")
     options.add_argument("--allow-running-insecure-content")
-    settings_config["BROWSER_NAME"] = browser_name if browser_name != "chrome" else settings_config["BROWSER_NAME"]
+    settings_config.browser_name = (
+        browser_name if browser_name != "chrome" else settings_config.browser_name
+    )
     match mode:
         case "headless":
             options.add_argument("--headless")
-            config.driver = _create_driver_with_browser_name(browser_name=browser_name, options=options)
+            config.driver = _create_driver_with_browser_name(
+                browser_name=browser_name, options=options
+            )
             config.driver.execute_cdp_cmd(
                 "Page.setDownloadBehavior",
                 {
@@ -74,11 +76,13 @@ def browser(pytestconfig):
                 },
             )
         case _:
-            config.driver = _create_driver_with_browser_name(browser_name=browser_name, options=options)
-    config.browser_name = settings_config["BROWSER_NAME"]
-    config.window_width = settings_config["BROWSER_WINDOW_WIDTH"]
-    config.window_height = settings_config["BROWSER_WINDOW_HEIGHT"]
-    config.timeout = settings_config["TIMEOUT"]
+            config.driver = _create_driver_with_browser_name(
+                browser_name=browser_name, options=options
+            )
+    config.browser_name = settings_config.browser_name
+    config.window_width = settings_config.browser_window_width
+    config.window_height = settings_config.browser_window_height
+    config.timeout = settings_config.timeout
     config.save_screenshot_on_failure = False
     config.save_page_source_on_failure = False
     yield driver
